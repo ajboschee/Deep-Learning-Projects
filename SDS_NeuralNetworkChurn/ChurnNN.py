@@ -42,7 +42,7 @@ classifier.add(Dense(units=6, kernel_initializer='uniform',activation='relu', in
 #second hidden layer
 classifier.add(Dense(units=6, kernel_initializer='uniform',activation='relu'))
 
-#output layer
+#output layer 
 classifier.add(Dense(units=1, kernel_initializer='uniform', activation='sigmoid'))
 
 #compile NN with stochastic gradient descent
@@ -53,5 +53,38 @@ classifier.fit(X_train, y_train, batch_size=10, nb_epoch=100)
 
 #predict test set results
 y_pred = classifier.predict(X_test)
+y_pred = (y_pred > 0.5)
+
+# make confusion matrix
+from sklearn.metrics import confusion_matrix
+cm=confusion_matrix(y_test, y_pred)
+
+print(cm)
+
+
+# predict new individual observation
+"""
+Geography: France -> 42
+Credit Score: 600
+Gender: Male -> 1
+Age: 40
+Tenure: 3
+Balance: 60000
+Num of Products: 2
+Credit Card: Yes -> 1
+Active Member: Yes -> 1
+Estimated Salary: 50000
+"""
+
+# turn into 2d array and apply scale with transform
+new_prediction = classifier.predict(sc.transform(np.array([[0, 0, 600, 1, 40, 3, 60000, 2, 1, 1, 50000]])))
+new_prediction = (new_prediction > 0.5)
+
+print(new_prediction)
+
+
+
+
+
 
 
